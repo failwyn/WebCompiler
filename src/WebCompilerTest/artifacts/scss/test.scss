@@ -1,4 +1,5 @@
-﻿@import "variables",  "sub/foo"; // Bootstrap overrides
+﻿@use "used" as *;
+@import "variables",  "sub/foo"; // Bootstrap overrides
 
 body {
     background-color: $background;
