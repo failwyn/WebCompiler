@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		build\build.sh = build\build.sh
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCompilerTestsCore", "src\WebCompilerTestsCore\WebCompilerTestsCore.csproj", "{F6D33ECE-F6A1-4F60-977E-42C70708921D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{43AAA3AD-A806-45A0-99A3-F0E7E3B81AEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43AAA3AD-A806-45A0-99A3-F0E7E3B81AEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43AAA3AD-A806-45A0-99A3-F0E7E3B81AEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6D33ECE-F6A1-4F60-977E-42C70708921D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6D33ECE-F6A1-4F60-977E-42C70708921D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6D33ECE-F6A1-4F60-977E-42C70708921D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6D33ECE-F6A1-4F60-977E-42C70708921D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
