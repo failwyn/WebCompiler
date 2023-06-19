@@ -82,9 +82,21 @@ namespace WebCompiler
         {
             string arguments = ConstructArguments(config);
 
-            // TODO: GH: replace Win32 exe
-            string processFileName = "cmd.exe";
-            string processArguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\sass.cmd")}\" {arguments} \"{info.FullName}\" \"";
+            string processFileName;
+            string processArguments;
+            switch ( Environment.OSVersion.Platform )
+            {
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    processFileName = "/bin/bash";
+                    processArguments = $"\"{Path.Combine(_path, "node_modules/.bin/sass")}\" {arguments} \"{info.FullName}\"";
+                    break;
+                        
+                default:
+                    processFileName = "cmd.exe";
+                    processArguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\sass.cmd")}\" {arguments} \"{info.FullName}\" \"";
+                    break;
+            }
 
             ProcessStartInfo start = new ProcessStartInfo
             {
@@ -111,13 +123,32 @@ namespace WebCompiler
                     postCssArguments += " --no-map";
                 }
 
-                // TODO: GH: replace Win32 exe
-                start.Arguments = start.Arguments.TrimEnd('"') + $" | \"{Path.Combine(_path, "node_modules\\.bin\\postcss.cmd")}\" {postCssArguments}\"";
+                switch ( Environment.OSVersion.Platform )
+                {
+                    case PlatformID.Unix:
+                    case PlatformID.MacOSX:
+                        start.Arguments = start.Arguments + $" | \"{Path.Combine(_path, "node_modules/.bin/postcss")}\" {postCssArguments}\"";
+                        break;
+                        
+                    default:
+                        start.Arguments = start.Arguments.TrimEnd('"') + $" | \"{Path.Combine(_path, "node_modules\\.bin\\postcss.cmd")}\" {postCssArguments}\"";
+                        break;
+                }
                 start.EnvironmentVariables.Add("BROWSERSLIST", options.AutoPrefix);
             }
 
-            start.EnvironmentVariables["PATH"] = _path + ";" + start.EnvironmentVariables["PATH"];
-
+            switch ( Environment.OSVersion.Platform )
+            {
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    start.EnvironmentVariables["PATH"] = _path + ":" + start.EnvironmentVariables["PATH"];
+                    break;
+                        
+                default:
+                    start.EnvironmentVariables["PATH"] = _path + ";" + start.EnvironmentVariables["PATH"];
+                    break;
+            }
+            
             using (Process p = Process.Start(start))
             {
                 var stdout = p.StandardOutput.ReadToEndAsync();

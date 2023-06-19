@@ -34,11 +34,11 @@
   <ItemGroup>
     <Content Include="MSBuild\*.targets" PackagePath="build\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Node\prepare.sh" />
-  </ItemGroup>
   <Target Name="PrepareNpmDependencies" AfterTargets="Restore">
     <Exec Command="..\..\build\build.cmd" />
+  </Target>
+  <Target Name="PrepareNpmDependencies" AfterTargets="Restore">
+    <Exec Command="..\..\build\build.sh" />
   </Target>
   <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
     <!--

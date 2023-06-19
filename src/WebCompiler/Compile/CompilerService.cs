@@ -78,8 +78,20 @@ namespace WebCompiler
         public static void Initialize()
         {
             var node_modules = Path.Combine(_path, "node_modules");
-            // TODO: GH: replace Win32 exe
-            var node_exe = Path.Combine(_path, "node.exe");
+
+            string node_exe;
+            switch ( Environment.OSVersion.Platform )
+            {
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    node_exe = "node";
+                    break;
+                        
+                default:
+                    node_exe = "node.exe";
+                    break;
+            }
+
             var log_file = Path.Combine(_path, "log.txt");
 
             lock (_syncRoot)
@@ -91,7 +103,6 @@ namespace WebCompiler
                     if (Directory.Exists(_path))
                         Directory.Delete(_path, true);
 
-                    // TODO: GH: replace Win32 commands
                     Directory.CreateDirectory(_path);
                     SaveResourceFile(_path, "WebCompiler.Node.node.7z", "node.7z");
                     SaveResourceFile(_path, "WebCompiler.Node.node_modules.7z", "node_modules.7z");
