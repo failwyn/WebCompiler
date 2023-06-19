@@ -2,7 +2,7 @@
   <Import Project="..\common.props" />
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net4.8;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net4.8;netstandard2.1</TargetFrameworks>
     <LangVersion>latest</LangVersion>
     <Title>Web Compiler</Title>
     <PackageId>BuildWebCompiler2022</PackageId>
@@ -23,6 +23,7 @@
     <EmbeddedResource Include="Node\node_modules.7z" />
     <EmbeddedResource Include="Node\7z.dll" />
     <EmbeddedResource Include="Node\7z.exe" />
+    <EmbeddedResource Include="Node\prepare.sh" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Build.Framework" Version="17.4.0" PrivateAssets="All" />
@@ -32,6 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MSBuild\*.targets" PackagePath="build\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Node\prepare.sh" />
   </ItemGroup>
   <Target Name="PrepareNpmDependencies" AfterTargets="Restore">
     <Exec Command="..\..\build\build.cmd" />
