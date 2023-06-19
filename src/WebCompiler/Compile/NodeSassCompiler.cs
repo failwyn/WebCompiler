@@ -81,6 +81,7 @@ namespace WebCompiler
         {
             string arguments = ConstructArguments(config);
 
+            // TODO: GH: replace Win32 exe
             ProcessStartInfo start = new ProcessStartInfo
             {
                 WorkingDirectory = new FileInfo(config.FileName).DirectoryName, // use config's directory to fix source map relative paths
@@ -104,6 +105,7 @@ namespace WebCompiler
                 if (!options.SourceMap && !config.SourceMap)
                     postCssArguments += " --no-map";
 
+                // TODO: GH: replace Win32 .cmd file
                 start.Arguments = start.Arguments.TrimEnd('"') + $" | \"{Path.Combine(_path, "node_modules\\.bin\\postcss.cmd")}\" {postCssArguments}\"";
                 start.EnvironmentVariables.Add("BROWSERSLIST", options.AutoPrefix);
             }

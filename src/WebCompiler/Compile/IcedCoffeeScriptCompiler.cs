@@ -97,6 +97,7 @@ namespace WebCompiler
         {
             string arguments = ConstructArguments(config);
 
+            // TODO: GH: replace Win32 exe
             ProcessStartInfo start = new ProcessStartInfo
             {
                 WorkingDirectory = info.Directory.FullName,

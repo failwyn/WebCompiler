@@ -82,6 +82,7 @@ namespace WebCompiler
         {
             string arguments = ConstructArguments(config);
 
+            // TODO: GH: replace Win32 exe
             ProcessStartInfo start = new ProcessStartInfo
             {
                 WorkingDirectory = new FileInfo(config.FileName).DirectoryName, // use config's directory to fix source map relative paths
