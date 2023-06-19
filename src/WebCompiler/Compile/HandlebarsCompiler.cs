@@ -126,20 +126,24 @@ namespace WebCompiler
             string arguments = ConstructArguments(config);
 
             // TODO: GH: replace Win32 exe
+            string processFileName = "cmd.exe";
+            string processArguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\handlebars.cmd")}\" \"{info.FullName}\" {arguments}\"";
+
             ProcessStartInfo start = new ProcessStartInfo
             {
                 WorkingDirectory = info.Directory.FullName,
                 UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true,
-                FileName = "cmd.exe",
-                Arguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\handlebars.cmd")}\" \"{info.FullName}\" {arguments}\"",
+                FileName = processFileName,
+                Arguments = processArguments,
                 StandardOutputEncoding = Encoding.UTF8,
                 StandardErrorEncoding = Encoding.UTF8,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
 
+            // TODO: GH: replace Win32 exe
             start.EnvironmentVariables["PATH"] = _path + ";" + start.EnvironmentVariables["PATH"];
 
             using (Process p = Process.Start(start))

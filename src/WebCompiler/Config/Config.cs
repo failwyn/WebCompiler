@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -68,7 +69,7 @@ namespace WebCompiler
         public FileInfo GetAbsoluteInputFile()
         {
             string folder = new FileInfo(FileName).DirectoryName;
-            return new FileInfo(Path.Combine(folder, InputFile.Replace("/", "\\"))); // TODO: GH: check replacement
+            return new FileInfo(Path.Combine(folder, InputFile.Replace('/', Path.DirectorySeparatorChar)));
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace WebCompiler
         public FileInfo GetAbsoluteOutputFile()
         {
             string folder = new FileInfo(FileName).DirectoryName;
-            return new FileInfo(Path.Combine(folder, OutputFile.Replace("/", "\\"))); // TODO: GH: check replacement
+            return new FileInfo(Path.Combine(folder, OutputFile.Replace('/', Path.DirectorySeparatorChar)));
         }
 
         /// <summary>

@@ -83,14 +83,17 @@ namespace WebCompiler
             string arguments = ConstructArguments(config);
 
             // TODO: GH: replace Win32 exe
+            string processFileName = "cmd.exe";
+            string processArguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\sass.cmd")}\" {arguments} \"{info.FullName}\" \"";
+
             ProcessStartInfo start = new ProcessStartInfo
             {
                 WorkingDirectory = new FileInfo(config.FileName).DirectoryName, // use config's directory to fix source map relative paths
                 UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true,
-                FileName = "cmd.exe",
-                Arguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\sass.cmd")}\" {arguments} \"{info.FullName}\" \"",
+                FileName = processFileName,
+                Arguments = processArguments,
                 StandardOutputEncoding = Encoding.UTF8,
                 StandardErrorEncoding = Encoding.UTF8,
                 RedirectStandardOutput = true,
@@ -108,6 +111,7 @@ namespace WebCompiler
                     postCssArguments += " --no-map";
                 }
 
+                // TODO: GH: replace Win32 exe
                 start.Arguments = start.Arguments.TrimEnd('"') + $" | \"{Path.Combine(_path, "node_modules\\.bin\\postcss.cmd")}\" {postCssArguments}\"";
                 start.EnvironmentVariables.Add("BROWSERSLIST", options.AutoPrefix);
             }
