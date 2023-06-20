@@ -23,7 +23,7 @@ namespace WebCompiler
         public CompilerResult Compile(Config config)
         {
             string baseFolder = Path.GetDirectoryName(config.FileName);
-            string inputFile = Path.Combine(baseFolder, config.InputFile);
+            string inputFile = Path.GetFullPath( Path.Combine(baseFolder, config.InputFile) );
 
             FileInfo info = new FileInfo(inputFile);
             string content = File.ReadAllText(info.FullName);
@@ -88,8 +88,8 @@ namespace WebCompiler
             {
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    processFileName = "/bin/bash";
-                    processArguments = $"\"{Path.Combine(_path, "node_modules/.bin/sass")}\" {arguments} \"{info.FullName}\"";
+                    processFileName = Path.Combine(_path, "node_modules/.bin/sass");
+                    processArguments = $"{arguments} \"{info.FullName}\"";
                     break;
                         
                 default:
@@ -127,7 +127,8 @@ namespace WebCompiler
                 {
                     case PlatformID.Unix:
                     case PlatformID.MacOSX:
-                        start.Arguments = start.Arguments + $" | \"{Path.Combine(_path, "node_modules/.bin/postcss")}\" {postCssArguments}\"";
+                        start.Arguments = $"-c \"\"{start.FileName}\" {start.Arguments}" + $" | \"{Path.Combine(_path, "node_modules/.bin/postcss")}\" {postCssArguments}\"";
+                        start.FileName = "/bin/bash";
                         break;
                         
                     default:

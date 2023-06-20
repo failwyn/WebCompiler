@@ -23,6 +23,8 @@ namespace WebCompiler
         /// <returns>A list of compiler results.</returns>
         public IEnumerable<CompilerResult> Process(string configFile, IEnumerable<Config> configs = null, bool force = false)
         {
+            configFile = Path.GetFullPath(configFile);
+
             if (_processing.Contains(configFile))
                 return Enumerable.Empty<CompilerResult>();
 
@@ -92,7 +94,7 @@ namespace WebCompiler
                                                              string sourceFile,
                                                              string projectPath)
         {
-            return SourceFileChanged(configFile, sourceFile, projectPath, new HashSet<string>());
+            return SourceFileChanged(Path.GetFullPath(configFile), sourceFile, projectPath, new HashSet<string>());
         }
 
         /// <summary>

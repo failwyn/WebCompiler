@@ -10,7 +10,7 @@ namespace WebCompilerTest.Minify
     [TestClass]
     public class CssOptionsTests
     {
-        private const string processingConfigFile = "../../Minify/artifacts/css/";
+        private const string processingConfigFile = "../../../../WebCompilerTest/Minify/artifacts/css/";
 
         [TestMethod, TestCategory("CssOptions")]
         public void CssCommentInUpperCaseShouldWork()

@@ -86,8 +86,8 @@ namespace WebCompiler
             {
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    processFileName = "/bin/bash";
-                    processArguments = $"\"{Path.Combine(_path, "node_modules/.bin/stylus")}\" {arguments} \"{info.FullName}\"";
+                    processFileName = Path.Combine(_path, "node_modules/.bin/stylus");
+                    processArguments = $"{arguments} \"{info.FullName}\"";
                     break;
                         
                 default:

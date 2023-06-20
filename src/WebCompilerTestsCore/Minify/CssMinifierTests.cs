@@ -9,13 +9,13 @@ namespace WebCompilerTest.Minify
     [TestClass]
     public class CssMinifierTests
     {
-        private const string processingConfigFile = "../../Minify/artifacts/css/";
+        private const string processingConfigFile = "../../../../WebCompilerTest/Minify/artifacts/css/";
 
         [TestCleanup]
         public void Cleanup()
         {
-            File.Delete("../../Minify/artifacts/css/site.css");
-            File.Delete("../../Minify/artifacts/css/site.min.css");
+            File.Delete("../../../../WebCompilerTest/Minify/artifacts/css/site.css");
+            File.Delete("../../../../WebCompilerTest/Minify/artifacts/css/site.min.css");
         }
 
         /// <summary>

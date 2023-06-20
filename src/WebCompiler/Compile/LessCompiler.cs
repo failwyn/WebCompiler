@@ -85,8 +85,8 @@ namespace WebCompiler
             {
                 case PlatformID.Unix:
                 case PlatformID.MacOSX:
-                    processFileName = "/bin/bash";
-                    processArguments = $"\"{Path.Combine(_path, "node_modules/.bin/lessc")}\" {arguments} \"{info.FullName}\"";
+                    processFileName = Path.Combine(_path, "node_modules/.bin/lessc");
+                    processArguments = $"{arguments} \"{info.FullName}\"";
                     break;
                         
                 default:

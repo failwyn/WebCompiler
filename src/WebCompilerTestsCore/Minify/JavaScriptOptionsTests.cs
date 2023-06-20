@@ -10,7 +10,7 @@ namespace WebCompilerTest.Minify
     [TestClass]
     public class JavaScriptOptionsTests
     {
-        private const string processingConfigFile = "../../Minify/artifacts/javascript/";
+        private const string processingConfigFile = "../../../../WebCompilerTest/Minify/artifacts/javascript/";
 
         [TestMethod, TestCategory("JavaScriptOptions")]
         public void EvanTreatmentInUpperCaseShouldWork()

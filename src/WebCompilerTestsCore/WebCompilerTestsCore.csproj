@@ -20,11 +20,7 @@
   <ItemGroup>
     <None Remove="Compile\" />
     <None Remove="Config\" />
-    <None Remove="Minify\artifacts\javascript\minify.js" />
     <None Remove="Minify\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Minify\artifacts\javascript\minify.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Compile\" />
