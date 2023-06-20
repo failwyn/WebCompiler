@@ -22,7 +22,7 @@ namespace WebCompiler
             var basePath = Path.GetFullPath( baseFile );
             var filePath = Path.GetFullPath( file );
 
-            // TODO: remove the common ancestory of the two paths
+            // remove the common ancestory of the two paths
             var basePathParts = basePath.Split(Path.DirectorySeparatorChar).ToList();
             var filePathParts = filePath.Split(Path.DirectorySeparatorChar).ToList();
             while( basePathParts.Any() && filePathParts.Any() && basePathParts.FirstOrDefault() == filePathParts.FirstOrDefault() )
