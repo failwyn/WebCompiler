@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+    <PackageReference Include="coverlet.collector" Version="3.1.2" />
+    <PackageReference Include="NUglify" Version="1.20.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Compile\" />
+    <None Remove="Config\" />
+    <None Remove="Minify\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Compile\" />
+    <Folder Include="Config\" />
+    <Folder Include="Minify\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebCompiler\WebCompiler.csproj" />
+  </ItemGroup>
+</Project>

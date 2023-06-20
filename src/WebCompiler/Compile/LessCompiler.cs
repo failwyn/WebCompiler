@@ -79,21 +79,47 @@ namespace WebCompiler
         {
             string arguments = ConstructArguments(config);
 
+            string processFileName;
+            string processArguments;
+            switch ( Environment.OSVersion.Platform )
+            {
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    processFileName = Path.Combine(_path, "node_modules/.bin/lessc");
+                    processArguments = $"{arguments} \"{info.FullName}\"";
+                    break;
+                        
+                default:
+                    processFileName = "cmd.exe";
+                    processArguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\lessc.cmd")}\" {arguments} \"{info.FullName}\" \"";
+                    break;
+            }
+
             ProcessStartInfo start = new ProcessStartInfo
             {
                 WorkingDirectory = info.Directory.FullName,
                 UseShellExecute = false,
                 WindowStyle = ProcessWindowStyle.Hidden,
                 CreateNoWindow = true,
-                FileName = "cmd.exe",
-                Arguments = $"/c \"\"{Path.Combine(_path, "node_modules\\.bin\\lessc.cmd")}\" {arguments} \"{info.FullName}\"\"",
+                FileName = processFileName,
+                Arguments = processArguments,
                 StandardOutputEncoding = Encoding.UTF8,
                 StandardErrorEncoding = Encoding.UTF8,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
             };
 
-            start.EnvironmentVariables["PATH"] = _path + ";" + start.EnvironmentVariables["PATH"];
+            switch ( Environment.OSVersion.Platform )
+            {
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    start.EnvironmentVariables["PATH"] = _path + ":" + start.EnvironmentVariables["PATH"];
+                    break;
+                        
+                default:
+                    start.EnvironmentVariables["PATH"] = _path + ";" + start.EnvironmentVariables["PATH"];
+                    break;
+            }
 
             using (Process p = Process.Start(start))
             {

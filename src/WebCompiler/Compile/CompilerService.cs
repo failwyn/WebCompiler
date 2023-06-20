@@ -78,7 +78,20 @@ namespace WebCompiler
         public static void Initialize()
         {
             var node_modules = Path.Combine(_path, "node_modules");
-            var node_exe = Path.Combine(_path, "node.exe");
+
+            string node_exe;
+            switch ( Environment.OSVersion.Platform )
+            {
+                case PlatformID.Unix:
+                case PlatformID.MacOSX:
+                    node_exe = "node";
+                    break;
+                        
+                default:
+                    node_exe = "node.exe";
+                    break;
+            }
+
             var log_file = Path.Combine(_path, "log.txt");
 
             lock (_syncRoot)
@@ -93,17 +106,35 @@ namespace WebCompiler
                     Directory.CreateDirectory(_path);
                     SaveResourceFile(_path, "WebCompiler.Node.node.7z", "node.7z");
                     SaveResourceFile(_path, "WebCompiler.Node.node_modules.7z", "node_modules.7z");
-                    SaveResourceFile(_path, "WebCompiler.Node.7z.exe", "7z.exe");
-                    SaveResourceFile(_path, "WebCompiler.Node.7z.dll", "7z.dll");
-                    SaveResourceFile(_path, "WebCompiler.Node.prepare.cmd", "prepare.cmd");
+
+                    string processFileName;
+                    string processArguments;
+                    switch ( System.Environment.OSVersion.Platform )
+                    {
+                        case PlatformID.Unix:
+                            case PlatformID.MacOSX:
+                            SaveResourceFile(_path, "WebCompiler.Node.prepare.sh", "prepare.sh");
+                            processFileName = "/bin/bash";
+                            processArguments = "prepare.sh";
+                            break;
+
+                        default:
+                            SaveResourceFile(_path, "WebCompiler.Node.7z.exe", "7z.exe");
+                            SaveResourceFile(_path, "WebCompiler.Node.7z.dll", "7z.dll");
+                            SaveResourceFile(_path, "WebCompiler.Node.prepare.cmd", "prepare.cmd");
+                            processFileName = "cmd.exe";
+                            processArguments = "/c prepare.cmd";
+                            break;
+                    }
+
 
                     ProcessStartInfo start = new ProcessStartInfo
                     {
                         WorkingDirectory = _path,
                         CreateNoWindow = true,
                         WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = "cmd.exe",
-                        Arguments = "/c prepare.cmd"
+                        FileName = processFileName,
+                        Arguments = processArguments
                     };
 
                     Process p = Process.Start(start);
