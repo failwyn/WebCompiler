@@ -28,3 +28,4 @@ _NCrunch_WebCompiler#Node
 src/WebCompiler/Node/node_modules/*
 /src/WebCompiler/Node/node.exe
 /src/WebCompiler/Node/package-lock.json
+/src/WebCompiler/Node/package.json
