@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <_WebCompilerTaskAssembly Condition="'$(MSBuildRuntimeType)' == 'Core'">..\tools\netstandard2.1\WebCompiler.dll</_WebCompilerTaskAssembly>
-        <_WebCompilerTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net4.8\WebCompiler.exe</_WebCompilerTaskAssembly>
+        <_WebCompilerTaskAssembly Condition="'$(MSBuildRuntimeType)' != 'Core'">..\tools\net48\WebCompiler.exe</_WebCompilerTaskAssembly>
     </PropertyGroup>
 
     <UsingTask AssemblyFile="$(_WebCompilerTaskAssembly)" TaskName="WebCompiler.CompilerBuildTask"/>
