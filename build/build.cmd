@@ -16,7 +16,6 @@ call npm install --quiet ^
         less-plugin-autoprefix ^
         less-plugin-csscomb ^
         sass ^
-        node-sass ^
         postcss@latest ^
         postcss-cli ^
         autoprefixer ^
@@ -24,12 +23,6 @@ call npm install --quiet ^
         handlebars ^
         > nul
 call npm install --quiet > nul
-
-if not exist "node_modules\node-sass\vendor\win32-ia32-48" (
-    echo Copying node binding...
-    md "node_modules\node-sass\vendor\win32-ia32-48"
-    copy binding.node "node_modules\node-sass\vendor\win32-ia32-48"
-)
 
 echo Deleting unneeded files and folders...
 del /s /q *.html > nul
@@ -55,7 +48,6 @@ del /s /q README > nul
 
 for /d /r . %%d in (benchmark)  do @if exist "%%d" rd /s /q "%%d" > nul
 for /d /r . %%d in (bench)      do @if exist "%%d" rd /s /q "%%d" > nul
-for /d /r . %%d in (doc)        do @if exist "%%d" rd /s /q "%%d" > nul
 for /d /r . %%d in (docs)       do @if exist "%%d" rd /s /q "%%d" > nul
 for /d /r . %%d in (example)    do @if exist "%%d" rd /s /q "%%d" > nul
 for /d /r . %%d in (examples)   do @if exist "%%d" rd /s /q "%%d" > nul

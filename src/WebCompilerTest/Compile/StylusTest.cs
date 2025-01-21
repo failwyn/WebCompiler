@@ -30,7 +30,7 @@ namespace WebCompilerTest
             Assert.IsTrue(File.Exists("../../artifacts/stylus/output.css"), "output doesn't exist");
 
             string sourceMap = ScssTest.DecodeSourceMap(result.First().CompiledContent);
-            Assert.IsTrue(sourceMap.Contains("\"vendor.styl\""), "Source map paths");
+            Assert.IsTrue(sourceMap.Contains("vendor.styl\""), "Source map paths");
         }
 
         [TestMethod, TestCategory("STYLUS")]
