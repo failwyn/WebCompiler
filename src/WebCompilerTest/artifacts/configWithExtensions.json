@@ -1,0 +1,16 @@
+﻿[
+  {
+    "outputFile": "*.razor.css",
+    "inputFile": "*.razor.scss",
+    "minify": {
+      "enabled": false
+    },
+    "includeInProject": true
+  },
+  {
+    "outputFile": "../scss/test.css",
+    "inputFile": "../scss/test.scss",
+    "minify": {},
+    "includeInProject": true
+  }
+]

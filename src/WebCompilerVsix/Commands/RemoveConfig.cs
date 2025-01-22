@@ -56,7 +56,7 @@ namespace WebCompilerVsix.Commands
 
             string configFile = item.ContainingProject.GetConfigFile();
 
-            _configs = ConfigFileProcessor.IsFileConfigured(configFile, sourceFile);
+            _configs = ConfigFileProcessor.IsFileConfigured(configFile, sourceFile, true);
 
             button.Visible = _configs != null && _configs.Any();
         }

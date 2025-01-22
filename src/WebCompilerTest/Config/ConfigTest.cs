@@ -16,6 +16,9 @@ namespace WebCompilerTest.Config
         private const string firstLevelDependencyFile = "../../artifacts/config/dependencies/foo.scss";
         private const string secondLevelDependencyFile = "../../artifacts/config/dependencies/sub/bar.scss";
 
+        private const string inputFileWildcardExtension = "*.razor.scss";
+        private const string outputFileWildcardExtension = "*.razor.css";
+
         private readonly FileInfo _inputFileInfo = new FileInfo(inputFile);
         private readonly FileInfo _outputFileInfo = new FileInfo(outputFile);
         private readonly FileInfo _firstLevelDependencyFileInfo = new FileInfo(firstLevelDependencyFile);
@@ -115,6 +118,60 @@ namespace WebCompilerTest.Config
             var compilationRequired = _config.CompilationRequired();
 
             Assert.AreEqual(true, compilationRequired);
+        }
+
+        [TestMethod, TestCategory("Config")]
+        public void InputFileExtension_WhenInputFileIsWildcardExtension_StripsAsterisk()
+        {
+            var config = new WebCompiler.Config()
+            {
+                InputFile = "*.razor.scss",
+            };
+
+            Assert.AreEqual(".razor.scss", config.InputExtension);
+        }
+
+        [TestMethod, TestCategory("Config")]
+        public void OutputFileExtension_WhenOutputFileIsWildcardExtension_StripsAsterisk()
+        {
+            var config = new WebCompiler.Config()
+            {
+                OutputFile = "*.razor.css",
+            };
+
+            Assert.AreEqual(".razor.css", config.OutputExtension);
+        }
+
+        [TestMethod, TestCategory("Config")]
+        public void IsExtensionPattern_WhenInputFileIsWildcardExtension_ReturnsTrue()
+        {
+            var config = new WebCompiler.Config()
+            {
+                InputFile = "*.razor.scss",
+            };
+
+            Assert.AreEqual(true, config.IsExtensionPattern);
+        }
+
+        [TestMethod, TestCategory("Config")]
+        public void IsExtensionPattern_WhenInputFileIsNotWildcardExtension_ReturnsFalse()
+        {
+            var config = new WebCompiler.Config()
+            {
+                InputFile = "somefile.razor.scss",
+            };
+
+            Assert.AreEqual(false, config.IsExtensionPattern);
+        }
+
+        [TestMethod, TestCategory("Config")]
+        public void IsExtensionPattern_WhenInputFileIsNotSet_ReturnsFalse()
+        {
+            var config = new WebCompiler.Config()
+            {
+            };
+
+            Assert.AreEqual(false, config.IsExtensionPattern);
         }
     }
 }

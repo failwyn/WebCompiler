@@ -60,7 +60,7 @@ namespace WebCompiler
             if (file != null)
             {
                 if (file.StartsWith("*"))
-                    configs = configs.Where(c => Path.GetExtension(c.InputFile).Equals(file.Substring(1), StringComparison.OrdinalIgnoreCase));
+                    configs = configs.Where(c => c.InputFile.EndsWith(file.Substring(1), StringComparison.OrdinalIgnoreCase));
                 else
                     configs = configs.Where(c => c.InputFile.Equals(file, StringComparison.OrdinalIgnoreCase));
             }
