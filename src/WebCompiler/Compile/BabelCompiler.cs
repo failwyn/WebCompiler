@@ -115,6 +115,8 @@ namespace WebCompiler
 
             if (options.SourceMap || config.SourceMap)
                 arguments += " --source-maps inline";
+            if (options.Compact.HasValue && !options.Compact.Value) 
+                arguments += " --compact false";
 
             return arguments;
         }

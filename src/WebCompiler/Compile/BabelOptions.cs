@@ -26,5 +26,8 @@ namespace WebCompiler
         {
             get { return "babel"; }
         }
+
+        [JsonProperty("compact")] 
+        public bool? Compact { get; set; }
     }
 }
