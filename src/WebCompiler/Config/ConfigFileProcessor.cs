@@ -213,7 +213,7 @@ namespace WebCompiler
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                File.WriteAllText(outputFile.FullName, config.Output, new UTF8Encoding(true));
+                File.WriteAllText(outputFile.FullName, config.Output, new UTF8Encoding(config.OutputUTF8Identifier));
             }
 
             OnAfterProcess(config, baseFolder, containsChanges);
@@ -233,7 +233,7 @@ namespace WebCompiler
 
                 if (smChanges)
                 {
-                    File.WriteAllText(mapFile, result.SourceMap, new UTF8Encoding(true));
+                    File.WriteAllText(mapFile, result.SourceMap, new UTF8Encoding(config.OutputUTF8Identifier));
                 }
 
                 OnAfterWritingSourceMap(absolute, mapFile, smChanges);

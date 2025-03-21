@@ -49,6 +49,13 @@ namespace WebCompiler
         public bool SourceMap { get; set; }
 
         /// <summary>
+        /// If true the UTF-8 BOM is added to the output file.
+        /// </summary>
+        [DefaultValue(true)]
+        [JsonProperty("outputUTF8Identifier")]
+        public bool OutputUTF8Identifier { get; set; } = true;
+
+        /// <summary>
         /// Options specific to each compiler. Based on the inputFile property.
         /// </summary>
         [JsonProperty("options")]

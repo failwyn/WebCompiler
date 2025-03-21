@@ -51,7 +51,7 @@ namespace WebCompiler
 
                 if (containsChanges)
                 {
-                    File.WriteAllText(minFile, result, new UTF8Encoding(true));
+                    File.WriteAllText(minFile, result, new UTF8Encoding(config.OutputUTF8Identifier));
                 }
 
                 OnAfterWritingMinFile(file, minFile, containsChanges);
@@ -83,7 +83,7 @@ namespace WebCompiler
 
             if (containsChanges)
             {
-                File.WriteAllText(minFile, result, new UTF8Encoding(true));
+                File.WriteAllText(minFile, result, new UTF8Encoding(config.OutputUTF8Identifier));
             }
 
             OnAfterWritingMinFile(file, minFile, containsChanges);

@@ -12,6 +12,10 @@ These are the changes to each version that has been released
 on the official Visual Studio extension gallery.These are the changes to each version that has been released
 on the official Visual Studio extension gallery.
 
+**2025-03-21**
+## 1.14.13
+- [x] add option to output utf-8 bom to files, default is true
+
 **2025-01-09**
 ## 1.14.12
 - [x] drop support for Node SASS since it is no longer maintained
