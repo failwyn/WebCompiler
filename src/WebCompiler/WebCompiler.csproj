@@ -14,7 +14,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Authors>Mads Kristensen, Jason Moore</Authors>
     <RepositoryUrl>https://github.com/failwyn/WebCompiler</RepositoryUrl>
-    <Version>1.14.14</Version>
+    <Version>1.14.15</Version>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
