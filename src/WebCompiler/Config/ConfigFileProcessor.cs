@@ -31,6 +31,11 @@ namespace WebCompiler
 
             try
             {
+                if (force)
+                {
+                    ConfigHandler.ClearExtensionBasedConfigs();
+                }
+
                 FileInfo info = new FileInfo(configFile);
                 configs = configs ?? ConfigHandler.GetConfigs(configFile);
 
@@ -107,7 +112,7 @@ namespace WebCompiler
             {
                 string folder = Path.GetDirectoryName(configFile);
                 List<CompilerResult> list = new List<CompilerResult>();
-                var configs = ConfigHandler.GetConfigs(configFile);
+                var configs = ConfigHandler.GetConfigs(configFile, sourceFile);
 
                 // Compile if the file if it's referenced directly in compilerconfig.json
                 foreach (Config config in configs)
@@ -161,15 +166,16 @@ namespace WebCompiler
         /// <summary>
         /// Returns a collection of config objects that all contain the specified sourceFile
         /// </summary>
-        public static IEnumerable<Config> IsFileConfigured(string configFile, string sourceFile)
+        /// <param name="ignoreExtensionConfig">Set to true so that extension based config is ignored.</param>
+        public static IEnumerable<Config> IsFileConfigured(string configFile, string sourceFile, bool ignoreExtensionConfig = false)
         {
             try
             {
-                var configs = ConfigHandler.GetConfigs(configFile);
+                var configs = ConfigHandler.GetConfigs(configFile, sourceFile);
                 string folder = Path.GetDirectoryName(configFile);
                 List<Config> list = new List<Config>();
 
-                foreach (Config config in configs)
+                foreach (Config config in configs.Where(x=> !ignoreExtensionConfig || !x.IsFromExtensionPattern))
                 {
                     string input = Path.Combine(folder, config.InputFile.Replace("/", "\\"));
 

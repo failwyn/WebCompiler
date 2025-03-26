@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,14 +12,16 @@ namespace WebCompiler
     /// </summary>
     public class ConfigHandler
     {
+        private static ConcurrentDictionary<string, ConcurrentDictionary<string, Config>> ExtensionBasedConfigs { get; } = new ConcurrentDictionary<string, ConcurrentDictionary<string, Config>>();
+
         /// <summary>
         /// Adds a config file if no one exist or adds the specified config to an existing config file.
         /// </summary>
         /// <param name="fileName">The file path of the configuration file.</param>
-        /// <param name="config">The compiler config object to add to the configration file.</param>
+        /// <param name="config">The compiler config object to add to the configuration file.</param>
         public void AddConfig(string fileName, Config config)
         {
-            IEnumerable<Config> existing = GetConfigs(fileName);
+            IEnumerable<Config> existing = GetConfigs(fileName, expandExtensions: false);
             List<Config> configs = new List<Config>();
             configs.AddRange(existing);
             configs.Add(config);
@@ -39,7 +42,7 @@ namespace WebCompiler
         /// </summary>
         public void RemoveConfig(Config configToRemove)
         {
-            IEnumerable<Config> configs = GetConfigs(configToRemove.FileName);
+            IEnumerable<Config> configs = GetConfigs(configToRemove.FileName, expandExtensions: false);
             List<Config> newConfigs = new List<Config>();
 
             if (configs.Contains(configToRemove))
@@ -94,24 +97,85 @@ namespace WebCompiler
         /// Get all the config objects in the specified file.
         /// </summary>
         /// <param name="fileName">A relative or absolute file path to the configuration file.</param>
+        /// <param name="sourceFile">The name of the source file that is being modified/selected</param>
+        /// <param name="expandExtensions">The flag that states if wildcard extension config entry should be processed. If true all files that satisfy it would be returned.</param>
         /// <returns>A list of Config objects.</returns>
-        public static IEnumerable<Config> GetConfigs(string fileName)
+        public static IEnumerable<Config> GetConfigs(string fileName, string sourceFile = null, bool expandExtensions = true)
         {
             FileInfo file = new FileInfo(fileName);
 
             if (!file.Exists)
                 return Enumerable.Empty<Config>();
 
-            string content = File.ReadAllText(fileName);
+            var content = File.ReadAllText(fileName);
             var configs = JsonConvert.DeserializeObject<IEnumerable<Config>>(content);
-            string folder = Path.GetDirectoryName(file.FullName);
-
+            var folder = Path.GetDirectoryName(file.FullName);
+            var extensionConfigs = new List<Config>();
             foreach (Config config in configs)
             {
+                if (config.IsExtensionPattern
+                    && (sourceFile == null || sourceFile.EndsWith(config.InputExtension))
+                    && expandExtensions)
+                {
+                    var cacheKey = $"{Path.GetFullPath(fileName)}-{config.InputExtension}";
+
+                    ProcessExtensionPattern(fileName, sourceFile, folder, cacheKey, config);
+                    extensionConfigs.AddRange(ExtensionBasedConfigs[cacheKey].Values.Where(ec => !configs.Any(c => c.InputFile?.Replace("/", "\\") == ec.InputFile)));
+                }
                 config.FileName = fileName;
             }
 
-            return configs;
+            return configs.Where(c => !c.IsExtensionPattern || !expandExtensions).Concat(extensionConfigs);
+        }
+
+        private static void ProcessExtensionPattern(string fileName, string sourceFile, string folder, string cacheKey, Config config)
+        {
+            if (!ExtensionBasedConfigs.ContainsKey(cacheKey))
+            {
+                var folderLength = folder.Length + 1;
+                var files = Directory.GetFiles(folder, $"{config.InputFile}", SearchOption.AllDirectories);
+                var fileConfigs = files.ToDictionary(f => f, f =>
+                {
+                    var inputFile = f.Substring(folderLength);
+                    return new Config()
+                    {
+                        FileName = fileName,
+                        InputFile = inputFile,
+                        OutputFile = inputFile.Replace(config.InputExtension, config.OutputExtension),
+                        Minify = config.Minify,
+                        Options = config.Options,
+                        SourceMap = config.SourceMap,
+                        UseNodeSass = config.UseNodeSass,
+                        IncludeInProject = config.IncludeInProject,
+                        IsFromExtensionPattern = true
+                    };
+                });
+
+                ExtensionBasedConfigs.TryAdd(cacheKey, new ConcurrentDictionary<string, Config>(fileConfigs));
+            }
+            else if (sourceFile != null && !ExtensionBasedConfigs[cacheKey].ContainsKey(sourceFile))
+            {
+                ExtensionBasedConfigs[cacheKey].TryAdd(sourceFile, new Config()
+                {
+                    FileName = fileName,
+                    InputFile = sourceFile,
+                    OutputFile = sourceFile.Replace(config.InputExtension, config.OutputExtension),
+                    Minify = config.Minify,
+                    Options = config.Options,
+                    SourceMap = config.SourceMap,
+                    UseNodeSass = config.UseNodeSass,
+                    IncludeInProject = config.IncludeInProject,
+                    IsFromExtensionPattern = true,
+                });
+            }
+        }
+
+        /// <summary>
+        /// Clears the configs based on input extensions.
+        /// </summary>
+        public static void ClearExtensionBasedConfigs()
+        {
+            ExtensionBasedConfigs.Clear();
         }
     }
 }

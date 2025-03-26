@@ -68,7 +68,7 @@ namespace WebCompilerVsix
 
         private ITaskRunnerNode GetFileType(string configPath, string extension)
         {
-            var configs = ConfigHandler.GetConfigs(configPath);
+            var configs = ConfigHandler.GetConfigs(configPath, expandExtensions: false);
             var types = configs?.Where(c => Path.GetExtension(c.InputFile).Equals(extension, StringComparison.OrdinalIgnoreCase));
 
             if (types == null || !types.Any())

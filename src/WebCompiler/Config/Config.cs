@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+
 using Newtonsoft.Json;
 
 namespace WebCompiler
@@ -24,10 +25,23 @@ namespace WebCompiler
         public string OutputFile { get; set; }
 
         /// <summary>
+        /// The extension to be used for output files - valid when <see cref="OutputFile"/> is wildcard extension.
+        /// </summary>
+        [JsonIgnore]
+        public string OutputExtension => this.OutputFile.Substring(1);
+
+
+        /// <summary>
         /// The relative file path to the input file.
         /// </summary>
         [JsonProperty("inputFile")]
         public string InputFile { get; set; }
+
+        /// <summary>
+        /// The extension to match input files - valid when <see cref="InputFile"/> is a wildcard extension.
+        /// </summary>
+        [JsonIgnore]
+        public string InputExtension => this.InputFile.Substring(1);
 
         /// <summary>
         /// Settings for the minification.
@@ -62,6 +76,19 @@ namespace WebCompiler
         public Dictionary<string, object> Options { get; set; } = new Dictionary<string, object>();
 
         internal string Output { get; set; }
+
+
+        /// <summary>
+        /// Determines if the config is only an extension pattern - not real file to process.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsExtensionPattern => this.InputFile?.StartsWith("*") ?? false;
+
+        /// <summary>
+        /// Marks that the config is created from the extension expansion and not defined in the compilerconfig file. 
+        /// </summary>
+        [JsonIgnore]
+        public bool IsFromExtensionPattern { get; set; }
 
         /// <summary>
         /// Converts the relative input file to an absolute file path.
